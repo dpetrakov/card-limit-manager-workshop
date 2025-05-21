@@ -1,0 +1,37 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: clm_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  migrator:
+    image: golang:1.23-alpine # Используем образ с Go для sql-migrate
+    container_name: clm_migrator
+    working_dir: /app
+    volumes:
+      - /Users/dpetrakov/projects/card-limit-manager-workshop:/app # Монтируем текущую директорию в /app в контейнере
+    command: ["/app/run_migrations.sh"]
+    depends_on:
+      postgres:
+        condition: service_healthy # Запускать только после того, как postgres станет healthy
+    environment:
+      # GOCACHE и GOMODCACHE могут быть полезны для ускорения сборки/установки Go пакетов
+      GOCACHE: "/go/cache"
+      GOMODCACHE: "/go/pkg/mod"
+      # Убедимся, что /go/bin в PATH, чтобы sql-migrate был доступен
+      PATH: "/go/bin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+volumes:
+  postgres_data:

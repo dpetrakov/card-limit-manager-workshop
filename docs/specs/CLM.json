@@ -1,0 +1,385 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Card Limit Manager - Limit-Request Service (CLM)",
+    "version": "1.0.0",
+    "description": "API для управления заявками на изменение лимитов корпоративных карт."
+  },
+  "servers": [
+    {
+      "url": "/api/v1",
+      "description": "Current API version"
+    }
+  ],
+  "paths": {
+    "/requests": {
+      "post": {
+        "summary": "Создание новой заявки на изменение лимита (R-1)",
+        "tags": ["Limit Requests"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LimitRequestCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Заявка успешно создана",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LimitRequestView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Ошибка валидации входных данных",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Необходима аутентификация"
+          },
+          "403": {
+            "description": "Доступ запрещен"
+          }
+        }
+      },
+      "get": {
+        "summary": "Получение списка заявок (с учетом прав доступа R-8)",
+        "tags": ["Limit Requests"],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/RequestStatus"
+            },
+            "description": "Фильтр по статусу заявки"
+          },
+          {
+            "name": "assignee_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Фильтр по ID назначенного согласующего (для роли approver)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Список заявок",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LimitRequestView"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Необходима аутентификация"
+          },
+          "403": {
+            "description": "Доступ запрещен"
+          }
+        }
+      }
+    },
+    "/requests/{id}": {
+      "get": {
+        "summary": "Получение информации о конкретной заявке (R-9)",
+        "tags": ["Limit Requests"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "ID заявки"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Детали заявки",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LimitRequestView"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Необходима аутентификация"
+          },
+          "403": {
+            "description": "Доступ запрещен (например, сотрудник пытается получить чужую заявку)"
+          },
+          "404": {
+            "description": "Заявка не найдена"
+          }
+        }
+      }
+    },
+    "/requests/{id}/approve": {
+      "patch": {
+        "summary": "Утверждение заявки (R-3, R-4)",
+        "tags": ["Limit Requests Actions"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "ID заявки"
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalAction"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Заявка утверждена, возвращается обновленная заявка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LimitRequestView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректное действие (например, заявка уже в финальном статусе)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Необходима аутентификация"
+          },
+          "403": {
+            "description": "Доступ запрещен (не ваша очередь согласовывать или нет прав)"
+          },
+          "404": {
+            "description": "Заявка не найдена"
+          }
+        }
+      }
+    },
+    "/requests/{id}/reject": {
+      "patch": {
+        "summary": "Отклонение заявки (R-3, R-4)",
+        "tags": ["Limit Requests Actions"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "ID заявки"
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalAction"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Заявка отклонена, возвращается обновленная заявка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LimitRequestView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректное действие (например, заявка уже в финальном статусе)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Необходима аутентификация"
+          },
+          "403": {
+            "description": "Доступ запрещен (не ваша очередь согласовывать или нет прав)"
+          },
+          "404": {
+            "description": "Заявка не найдена"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": ["code", "message"]
+      },
+      "UserRole": {
+        "type": "string",
+        "enum": ["employee", "approver", "admin"],
+        "description": "Роль пользователя (согласно R-8)"
+      },
+      "RequestStatus": {
+        "type": "string",
+        "enum": [
+          "PENDING_TEAM_LEAD",
+          "PENDING_RISK_OFFICER",
+          "PENDING_CFO",
+          "APPROVED",
+          "REJECTED",
+          "COMPLETED"
+        ],
+        "description": "Статус заявки (R-7)"
+      },
+      "LimitRequestBase": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "decimal",
+            "description": "Сумма заявки (R-1)"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Валюта заявки (R-1)",
+            "example": "RUB"
+          },
+          "justification": {
+            "type": "string",
+            "description": "Обоснование (R-1)"
+          },
+          "desired_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Желаемая дата начала (R-1)"
+          }
+        },
+        "required": ["amount", "currency", "justification", "desired_date"]
+      },
+      "LimitRequestCreate": {
+        "allOf": [
+          { "$ref": "#/components/schemas/LimitRequestBase" }
+        ]
+      },
+      "LimitRequestView": {
+        "allOf": [
+          { "$ref": "#/components/schemas/LimitRequestBase" },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "description": "Идентификатор заявки"
+              },
+              "user_id": {
+                "type": "string",
+                "format": "uuid",
+                "description": "ID инициатора заявки"
+              },
+              "status": {
+                "$ref": "#/components/schemas/RequestStatus"
+              },
+              "current_approver_id": {
+                "type": ["string", "null"],
+                "format": "uuid",
+                "description": "ID текущего согласующего"
+              },
+              "created_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updated_at": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": ["id", "user_id", "status", "created_at", "updated_at"]
+          }
+        ]
+      },
+      "ApprovalAction": {
+        "type": "object",
+        "properties": {
+          "comment": {
+            "type": ["string", "null"],
+            "description": "Комментарий к действию (R-5)"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+} 
