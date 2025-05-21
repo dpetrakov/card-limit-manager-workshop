@@ -1,0 +1,8 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Agent's main rule
+
+Read and execute instructions from the [AGENTS.md](mdc:AGENTS.md) file.

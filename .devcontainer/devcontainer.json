@@ -1,0 +1,81 @@
+{
+  "name": "Card-Limit Manager Dev Environment",
+  // ─── 1. Базовый образ ──────────────────────────────────────────────
+  // Debian Bullseye + sudo-privileged пользователь "vscode"
+  "image": "mcr.microsoft.com/devcontainers/base:bullseye",
+  // ─── 2. Features (устанавливаются через ассемблер Dev Containers) ──
+  "features": {
+    // Запуск Docker внутри контейнера (нужен для docker-compose воркшопа)
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+      "version": "latest",
+      "enableNonRootDocker": "true",
+      "moby": "true"
+    },
+    // Go 1.22 — бэкенд микросервисов
+    "ghcr.io/devcontainers/features/go:1": {
+      "version": "1.22"
+    },
+    // Node 20 — фронтенд (Vite + React TS)
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    },
+    // Клиент Postgres — для psql и скриптов миграций
+    "ghcr.io/robbert229/devcontainer-features/postgresql-client:1": {}
+  },
+  // ─── 3. Доп. настройки Docker ──────────────────────────────────────
+  "runArgs": [
+    "--add-host=host.docker.internal:host-gateway" // чтобы backend мог обращаться к хосту
+  ],
+  // ─── 4. Проброс портов (по умолчанию VS Code опубликует локально) ─
+  "forwardPorts": [
+    8080,
+    5173,
+    5432
+  ],
+  // ─── 5. Переменные окружения ───────────────────────────────────────
+  "remoteEnv": {
+    "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+  },
+  // ─── 6. Команды после создания контейнера ──────────────────────────
+  "postCreateCommand": [
+    // backend: установка зависимостей
+    ["sh", "-c", "if [ -f services/clm/go.mod ]; then (cd services/clm && go mod download); fi"],
+    ["sh", "-c", "if [ -f services/notif/go.mod ]; then (cd services/notif && go mod download); fi"],
+    // frontend: установка зависимостей (pnpm быстрее npm; fallback → npm)
+    ["sh", "-c", "if [ -f frontend/package.json ]; then (cd frontend && (command -v pnpm >/dev/null 2>&1 && pnpm install || npm ci)); fi"],
+    // установка gopls и удобных Go-tools
+    ["go", "install", "golang.org/x/tools/gopls@latest"],
+    ["go", "install", "github.com/cosmtrek/air@latest"]
+  ],
+  // ─── 7. Расширения и настройки VS Code ─────────────────────────────
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "golang.Go",
+        "ms-azuretools.vscode-docker",
+        "cweijan.vscode-postgresql-client2",
+        "shd101wyy.markdown-preview-enhanced",
+        "bierner.markdown-mermaid",
+        "bocovo.dbml-erd-visualizer",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "mechatroner.rainbow-csv"
+      ],
+      "settings": {
+        // Go
+        "go.useLanguageServer": true,
+        "go.toolsManagement.autoUpdate": true,
+        // Node / React
+        "editor.formatOnSave": true,
+        "eslint.validate": [
+          "javascript",
+          "javascriptreact",
+          "typescript",
+          "typescriptreact"
+        ]
+      }
+    }
+  }
+  // ─── 8. Пользователь (по умолчанию "vscode" имеет sudo) ────────────
+  // "remoteUser": "vscode"
+}
