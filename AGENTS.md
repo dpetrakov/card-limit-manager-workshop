@@ -10,11 +10,10 @@
     ├─ architecture.md              # КЛЮЧЕВОЙ документ: диаграммы + описание компонентов
     ├─ deployment_strategy.md       # подход к развёртыванию
     ├─ database.dbml                # КЛЮЧЕВОЙ документ: ER-схема БД (DBML)
-    └─ requirements/
-       ├─ CLM.md                    # бизнес-требования (R-CLM-1…)
-       └─ NOTIF.md                  # бизнес-требования (R-NOTIF-1…)
-  ─ docs/specs/                     # подробные спецификации (по каждому R-…)
-    └─ CLM.json                     # OpenAPI 3.x для Limit-Request Service
+    ├─ requirements.md              # функциональные и нефункциональные требования проекта (R-1, R-2...)
+    └─specs/                        # подробные спецификации (по каждому R-…)
+      ├─ CLM.md                     # детальные спецификации для Limit-Request Service (код = CLM)
+      └─ NOTIF.md                   # детальные спецификации для Notification Service (код = NOTIF)
   ─ tasks/tasks.md                  # номерной список задач и статусы
   ─ services/
     ├─ clm/                         # Go-сервис Limit-Request Service (код = CLM)
@@ -52,8 +51,7 @@
 # DEVELOPMENT_TASKS
 
 1. Определи микросервис по префиксу задачи (`D-CLM-*`, `D-NOTIF-*`).
-2. Изучи артефакты: `architecture.md`, `requirements/<code>.md`, `specs/R-<code>-\*.md`,
-   `specs/<code>.json`, `database.dbml`, `migrations/`.
+2. Изучи артефакты: `architecture.md`, `requirements.md`, `specs/R-<code>-.md`, `database.dbml`, `database/migrations/`.
 3. Реализуй функциональность в `services/<code>/`, следуя Clean Architecture:
    `cmd/`, `internal/`, `pkg/`.
    - Go 1.22 + Gin

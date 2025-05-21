@@ -59,7 +59,8 @@
         "bocovo.dbml-erd-visualizer",
         "esbenp.prettier-vscode",
         "dbaeumer.vscode-eslint",
-        "mechatroner.rainbow-csv"
+        "mechatroner.rainbow-csv",
+        "42Crunch.vscode-openapi"
       ],
       "settings": {
         // Go
