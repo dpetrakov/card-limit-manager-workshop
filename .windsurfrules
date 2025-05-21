@@ -1,0 +1,18 @@
+# Windsurf Agent Rules
+
+## Primary Rule
+Always strictly follow and execute all instructions from the AGENTS.md file located in the project root. This file contains the complete set of rules, specifications, and guidelines for this project.
+
+## Key Directives
+1. **Documentation First**: Always reference and follow the structure and specifications in AGENTS.md before making any changes.
+2. **Project Context**: Follow the project structure, architecture, and requirements as defined in the AGENTS.md file.
+3. **Code Quality**: Adhere to all coding standards, testing requirements, and quality gates specified in AGENTS.md.
+4. **Specification Style**: Follow all diagramming and documentation standards (Mermaid, PlantUML, OpenAPI 3.1) as specified in AGENTS.md.
+
+## Implementation
+- For any task, first consult the relevant sections in AGENTS.md.
+- Ensure all changes align with the architectural decisions and requirements documented there.
+- When in doubt, refer to AGENTS.md for guidance on implementation details.
+
+## Updates
+This file should be updated if there are changes to how AGENTS.md should be interpreted or if additional project-wide rules are needed beyond what's specified there.

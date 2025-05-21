@@ -3,6 +3,6 @@ description:
 globs: 
 alwaysApply: true
 ---
-# Agent's main rule
+# Main Agent Rule
 
-Read and execute instructions from the [AGENTS.md](mdc:AGENTS.md) file.
+Основное правило всегда использовать файл [AGENTS.md](mdc:AGENTS.md), расположенный в корне проекта.
