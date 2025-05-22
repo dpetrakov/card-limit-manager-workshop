@@ -33,5 +33,25 @@ services:
       # Убедимся, что /go/bin в PATH, чтобы sql-migrate был доступен
       PATH: "/go/bin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
+  clm-service:
+    build:
+      context: ./services/clm
+      dockerfile: Dockerfile
+    container_name: clm_service
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrator: # Ensure migrations run before clm-service starts
+        condition: service_completed_successfully
+    environment:
+      # Placeholder for database connection string or other env vars
+      # Example: DATABASE_URL: "postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable"
+      GIN_MODE: "release" # Or "debug" for more verbose output from Gin
+    # For development with hot-reloading, you might add:
+    # volumes:
+    #   - ./services/clm:/app
+
 volumes:
   postgres_data:
