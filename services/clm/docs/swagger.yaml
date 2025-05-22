@@ -1,0 +1,93 @@
+basePath: /
+definitions:
+  models.ErrorResponse:
+    properties:
+      error:
+        example: Detailed error message here
+        type: string
+    type: object
+  models.LimitRequestCreate:
+    properties:
+      amount:
+        type: number
+      currency:
+        type: string
+      desired_date:
+        description: 'Expected format: YYYY-MM-DD'
+        type: string
+      justification:
+        type: string
+    type: object
+  models.LimitRequestView:
+    properties:
+      amount:
+        type: number
+      created_at:
+        type: string
+      currency:
+        type: string
+      current_assignee_id:
+        description: Changed to match spec
+        type: string
+      desired_date:
+        type: string
+      id:
+        type: string
+      justification:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is the API for Card Limit Management service.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: CLM Service API
+  version: "1.0"
+paths:
+  /requests:
+    post:
+      consumes:
+      - application/json
+      description: Create a new limit request with the input payload. Team lead will
+        be auto-assigned based on user's department.
+      parameters:
+      - description: Create Limit Request Payload
+        in: body
+        name: limitRequest
+        required: true
+        schema:
+          $ref: '#/definitions/models.LimitRequestCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created limit request
+          schema:
+            $ref: '#/definitions/models.LimitRequestView'
+        "400":
+          description: Invalid request payload or data
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal server error or specific business logic error (e.g.,
+            team lead not configured)
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Create a new limit request (with R-2 auto team lead assignment)
+      tags:
+      - requests
+schemes:
+- http
+swagger: "2.0"

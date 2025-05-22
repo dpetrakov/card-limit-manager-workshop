@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(go get:*)",
+      "Bash(go test:*)",
+      "Bash(go run:*)",
+      "Bash(rm:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(go list:*)",
+      "Bash(go install:*)",
+      "Bash(~/go/bin/swag init:*)"
+    ],
+    "deny": []
+  }
+}
