@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: clm_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+
+development:
+  dialect: postgres
+  datasource: "host=postgres port=5432 user=postgres password=postgres dbname=postgres sslmode=disable"
+  dir: database/migrations
+  table: migrations

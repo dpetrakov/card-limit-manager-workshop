@@ -22,7 +22,7 @@ services:
     working_dir: /app
     volumes:
       - /Users/dpetrakov/projects/card-limit-manager-workshop:/app # Монтируем текущую директорию в /app в контейнере
-    command: ["/app/run_migrations.sh"]
+    command: ["sh", "/app/run_migrations.sh"]
     depends_on:
       postgres:
         condition: service_healthy # Запускать только после того, как postgres станет healthy
