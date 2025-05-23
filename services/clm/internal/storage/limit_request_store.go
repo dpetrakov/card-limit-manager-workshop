@@ -59,7 +59,7 @@ func (s *DBStore) Create(ctx context.Context, request *models.LimitRequest) (*mo
 
 	var currentApproverID interface{}
 	if request.CurrentApproverID.Valid {
-		currentApproverID = request.CurrentApproverID.UUID
+		currentApproverID = request.CurrentApproverID.String
 	} else {
 		currentApproverID = nil
 	}

@@ -39,7 +39,7 @@ type LimitRequest struct {
 	Justification     string         `db:"justification"`
 	DesiredDate       time.Time      `db:"desired_date"`
 	Status            string         `db:"status"`
-	CurrentAssigneeID sql.NullString `db:"current_assignee_id"` // Nullable UUID as string
+	CurrentApproverID sql.NullString `db:"current_approver_id"` // Fixed: matches DB schema
 	CreatedAt         time.Time      `db:"created_at"`
 	UpdatedAt         time.Time      `db:"updated_at"`
 }
@@ -47,9 +47,11 @@ type LimitRequest struct {
 // User represents a user in the system.
 type User struct {
 	ID           uuid.UUID `db:"id"`
+	ExternalID   string    `db:"external_id"`
 	Email        string    `db:"email"`
+	Name         string    `db:"name"`
 	Role         string    `db:"role"`
-	DepartmentID uuid.UUID `db:"department_id"`
+	DepartmentID uuid.UUID `db:"department_id"` // Will be added in future migration for R-2
 	CreatedAt    time.Time `db:"created_at"`
 	UpdatedAt    time.Time `db:"updated_at"`
 }

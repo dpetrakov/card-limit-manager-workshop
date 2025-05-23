@@ -92,8 +92,8 @@ func CreateLimitRequestHandler(c *gin.Context) {
 	}
 
 	// Set current_assignee_id from R-2 logic
-	if createdRequest.CurrentAssigneeID.Valid {
-		assigneeIDStr := createdRequest.CurrentAssigneeID.String
+	if createdRequest.CurrentApproverID.Valid {
+		assigneeIDStr := createdRequest.CurrentApproverID.String
 		response.CurrentAssigneeID = &assigneeIDStr
 	}
 
