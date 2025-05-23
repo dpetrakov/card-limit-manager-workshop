@@ -1,9 +1,8 @@
-import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import LimitRequestForm from "./LimitRequestForm";
 import * as api from "../services/limitRequestApi"; // To mock createLimitRequest
-import { LimitRequestView } from "../types/limitRequest";
+import type { LimitRequestView } from "../types/limitRequest";
 
 // Mock the API service
 jest.mock("../services/limitRequestApi");

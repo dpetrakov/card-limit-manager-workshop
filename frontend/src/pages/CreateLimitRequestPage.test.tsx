@@ -1,8 +1,7 @@
-import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import CreateLimitRequestPage from "./CreateLimitRequestPage";
-import { LimitRequestView } from "../types/limitRequest";
+import type { LimitRequestView } from "../types/limitRequest";
 
 // Mock the LimitRequestForm component
 jest.mock("../components/LimitRequestForm", () => {

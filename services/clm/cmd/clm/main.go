@@ -4,8 +4,9 @@ import (
 	"log"
 	// "net/http" // Removed as it's not directly used
 
-	"github.com/gin-gonic/gin"
 	"services/clm/internal/handlers"
+
+	"github.com/gin-gonic/gin"
 	// "services/clm/internal/storage" // Not needed if store is created in handler
 )
 
@@ -16,8 +17,11 @@ func main() {
 	// store := storage.NewDBStore()
 	// For now, the handler creates its own store instance.
 
-	// Setup routes
-	router.POST("/requests", handlers.CreateLimitRequestHandler)
+	// Setup API v1 routes group
+	v1 := router.Group("/api/v1")
+	{
+		v1.POST("/requests", handlers.CreateLimitRequestHandler)
+	}
 
 	// Start server
 	port := "8080"

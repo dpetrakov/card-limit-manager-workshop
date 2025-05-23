@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import {
+import type {
   LimitRequestCreate,
   LimitRequestView,
-  ApiError,
 } from "../types/limitRequest";
 import { createLimitRequest } from "../services/limitRequestApi";
 import styles from "./LimitRequestForm.module.css";

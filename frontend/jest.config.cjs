@@ -1,7 +1,7 @@
 module.exports = {
   preset: "ts-jest",
   testEnvironment: "jsdom",
-  setupFilesAfterEnv: ["@testing-library/jest-dom/extend-expect"],
+  setupFilesAfterEnv: ["@testing-library/jest-dom"],
   moduleNameMapper: {
     // Handle CSS Modules
     "\\.(module\\.css|css)$": "identity-obj-proxy",
@@ -9,7 +9,13 @@ module.exports = {
     "\\.(jpg|jpeg|png|gif|webp|svg)$": "<rootDir>/__mocks__/fileMock.js", // Example, if you have assets
   },
   transform: {
-    "^.+\\.(ts|tsx)$": "ts-jest",
+    "^.+\\.(ts|tsx)$": ["ts-jest", {
+      tsconfig: {
+        jsx: "react-jsx",
+        esModuleInterop: true,
+        allowSyntheticDefaultImports: true,
+      },
+    }],
   },
   // Automatically clear mock calls and instances between every test
   clearMocks: true,

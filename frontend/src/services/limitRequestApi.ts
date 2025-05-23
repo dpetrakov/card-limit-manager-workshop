@@ -1,5 +1,5 @@
 // Example for frontend/src/services/limitRequestApi.ts
-import {
+import type {
   LimitRequestCreate,
   LimitRequestView,
   ApiError,

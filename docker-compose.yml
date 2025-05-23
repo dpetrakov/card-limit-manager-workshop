@@ -21,7 +21,7 @@ services:
     container_name: clm_migrator
     working_dir: /app
     volumes:
-      - .:/app # Монтируем текущую директорию в /app в контейнере. Changed from absolute path.
+      - /Users/dpetrakov/projects/card-limit-manager-workshop:/app # Монтируем текущую директорию в /app в контейнере. Changed from absolute path.
     command: ["sh", "/app/run_migrations.sh"]
     depends_on:
       postgres:
@@ -64,7 +64,7 @@ services:
     ports:
       - "80:80" # Main entry point for the application
     volumes:
-      - ./nginx-proxy-conf/nginx.conf:/etc/nginx/nginx.conf:ro
+      - /Users/dpetrakov/projects/card-limit-manager-workshop/nginx-proxy-conf/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       frontend:
         condition: service_started # Or service_healthy if frontend had a healthcheck

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import LimitRequestForm from "../components/LimitRequestForm";
-import { LimitRequestView } from "../types/limitRequest";
+import type { LimitRequestView } from "../types/limitRequest";
 import styles from "../components/LimitRequestForm.module.css"; // Re-using styles for messages
 
 const CreateLimitRequestPage: React.FC = () => {

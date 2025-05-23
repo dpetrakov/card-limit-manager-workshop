@@ -4,10 +4,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"services/clm/internal/models"
 	"services/clm/internal/storage"
+
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 // CreateLimitRequestHandler handles the creation of new limit requests.
@@ -44,8 +45,10 @@ func CreateLimitRequestHandler(c *gin.Context) {
 	}
 
 	// Construct LimitRequest object
+	// For demo purposes, use a fixed test user. In real app, get from auth context.
+	testUserID, _ := uuid.Parse("a005d32d-6190-477c-b23e-38c44eaaaae0")
 	limitRequest := &models.LimitRequest{
-		UserID:        uuid.New(), // Placeholder UserID
+		UserID:        testUserID, // Use existing test user
 		Amount:        req.Amount,
 		Currency:      req.Currency,
 		Justification: req.Justification,
