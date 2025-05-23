@@ -54,13 +54,11 @@ func CreateLimitRequestHandler(c *gin.Context) {
 		return
 	}
 
-	// Get user ID from JWT token (placeholder - in real app would parse JWT)
-	// For now, using a fixed test user ID that should exist in the database
-	userID := uuid.MustParse("550e8400-e29b-41d4-a716-446655440000") // Test user ID
-
-	// Construct LimitRequest object (without status and assignee - will be set by R-2 logic)
+	// Construct LimitRequest object
+	// For demo purposes, use a fixed test user. In real app, get from auth context.
+	testUserID, _ := uuid.Parse("a005d32d-6190-477c-b23e-38c44eaaaae0")
 	limitRequest := &models.LimitRequest{
-		UserID:        userID,
+		UserID:        testUserID, // Use existing test user
 		Amount:        req.Amount,
 		Currency:      req.Currency,
 		Justification: req.Justification,
